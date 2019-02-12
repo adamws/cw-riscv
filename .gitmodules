@@ -1,0 +1,3 @@
+[submodule "docker-riscv-toolchain"]
+	path = docker-riscv-toolchain
+	url = https://github.com/adamws/docker-riscv-toolchain.git
