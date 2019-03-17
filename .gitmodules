@@ -1,3 +1,6 @@
 [submodule "docker-riscv-toolchain"]
 	path = docker-riscv-toolchain
 	url = https://github.com/adamws/docker-riscv-toolchain.git
+[submodule "tiny-AES-c"]
+	path = tiny-AES-c
+	url = https://github.com/kokke/tiny-AES-c
