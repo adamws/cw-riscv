@@ -15,6 +15,9 @@
 #error "This demo run on HiFive1 only."
 #endif
 
+// GPIO23:
+#define TRIG_PIN_OFFSET (23)
+
 static const char sifive_msg[] = "\n\r\
 \n\r\
                'AES CPA' Demo \n\r\
@@ -105,6 +108,10 @@ int main(void) {
   UART0_REG(UART_REG_TXCTRL) = UART_TXEN;
   UART0_REG(UART_REG_RXCTRL) = UART_RXEN;
 
+  // Configure TRIG pin
+  GPIO_REG(GPIO_INPUT_EN) &= ~(0x1 << TRIG_PIN_OFFSET);
+  GPIO_REG(GPIO_OUTPUT_EN) |= (0x1 << TRIG_PIN_OFFSET);
+
   // Wait a bit to avoid corruption on the UART.
   // (In some cases, switching to the IOF can lead
   // to output glitches, so need to let the UART
@@ -119,6 +126,8 @@ int main(void) {
 
   char c = 0;
   while(1){
+    GPIO_REG(GPIO_OUTPUT_VAL) &= ~(0x1 << TRIG_PIN_OFFSET);
+
     volatile uint64_t *  now = (volatile uint64_t*)(CLINT_CTRL_ADDR + CLINT_MTIME);
     volatile uint64_t then = *now + 100;
     while (*now < then) { }
@@ -129,5 +138,6 @@ int main(void) {
         _putc(c);
       }
     }
+    GPIO_REG(GPIO_OUTPUT_VAL) |= (0x1 << TRIG_PIN_OFFSET);
   }
 }
